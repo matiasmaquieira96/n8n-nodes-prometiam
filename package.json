@@ -1,0 +1,66 @@
+{
+  "name": "n8n-nodes-prometiam",
+  "version": "0.1.0",
+  "description": "n8n community node for the Prometiam API: search and look up European companies, screen names against sanctions lists (beta), check corporate insolvency notices, validate VAT numbers and LEIs.",
+  "license": "MIT",
+  "homepage": "https://www.prometiam.com/risk-api/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matiasmaquieira96/n8n-nodes-prometiam.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matiasmaquieira96/n8n-nodes-prometiam/issues"
+  },
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "prometiam",
+    "company-data",
+    "company-search",
+    "kyb",
+    "know-your-business",
+    "sanctions-screening",
+    "insolvency",
+    "vat-validation",
+    "lei",
+    "europe"
+  ],
+  "author": {
+    "name": "Prometiam",
+    "email": "support@prometiam.com"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "test": "npm run build && node --test test/",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/PrometiamApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Prometiam/Prometiam.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "^0.50.3",
+    "eslint": "^9.32.0",
+    "n8n-workflow": "^2.41.1",
+    "prettier": "^3.6.2",
+    "release-it": "^19.2.4",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

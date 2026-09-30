@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-prometiam.prometiam",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Finance & Accounting", "Sales"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://www.prometiam.com/risk-api/docs"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://www.prometiam.com/risk-api/docs"
+			}
+		]
+	}
+}

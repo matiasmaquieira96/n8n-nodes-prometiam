@@ -1,0 +1,41 @@
+# Lint, build and test on every push and pull request.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # The API-agreement tests check every path, parameter and enum the node uses against the live API description.
+      - name: Fetch the API description
+        run: curl -fsSL -A "n8n-nodes-prometiam-ci" https://www.prometiam.com/openapi.json -o "$RUNNER_TEMP/openapi.json"
+
+      # Builds, then runs the tests.
+      - name: Test
+        run: npm test
+        env:
+          PROMETIAM_OPENAPI: ${{ runner.temp }}/openapi.json
