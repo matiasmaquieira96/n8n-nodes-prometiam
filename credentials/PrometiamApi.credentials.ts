@@ -25,7 +25,7 @@ export class PrometiamApi implements ICredentialType {
 			required: true,
 			default: '',
 			description:
-				'Your Prometiam API key. It starts with rk_live_. Create one for free at https://www.prometiam.com/signup',
+				'Your Prometiam API key. It starts with rk_live_. Start a 14-day free trial (card required, nothing charged for 14 days) at https://www.prometiam.com/signup',
 		},
 	];
 

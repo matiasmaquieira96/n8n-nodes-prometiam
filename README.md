@@ -1,6 +1,6 @@
 # n8n-nodes-prometiam
 
-This is an n8n community node for [Prometiam](https://www.prometiam.com). It puts company data for Europe in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark and Croatia, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
+This is an n8n community node for [Prometiam](https://www.prometiam.com). It puts company data for Europe in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia and Slovakia, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
 
 [n8n](https://n8n.io) is a workflow automation platform.
 
@@ -28,7 +28,7 @@ To install by hand on a self-hosted instance, run `npm install n8n-nodes-prometi
 
 ## Credentials
 
-1. Create an API key at [prometiam.com/signup](https://www.prometiam.com/signup). It looks like `rk_live_…`. The free plan is a 14-day trial of 1,000 calls with no credit card; paid plans are on [prometiam.com/pricing](https://www.prometiam.com/pricing).
+1. Start a 14-day free trial at [prometiam.com/signup](https://www.prometiam.com/signup) (card required, nothing charged for 14 days; 1,000 calls, then Starter unless you cancel) to get an API key. It looks like `rk_live_…`. To try the API first without a card, use the demo key in the docs or the MCP server in demo mode (`npx -y prometiam-risk-mcp`, no key). Paid plans are on [prometiam.com/pricing](https://www.prometiam.com/pricing).
 2. In n8n, add a **Prometiam API** credential and paste the key into **API key**.
 3. Save. n8n tests the credential with one call to `GET /account`, which any valid key can read, and shows whether the key was accepted. That call counts as one request.
 
@@ -43,14 +43,14 @@ The node sends the key as `Authorization: Bearer <key>` to `https://api.prometia
 | Company | Get | The full profile of one company by its Company ID, with optional extra blocks (**Include**). |
 | Company | Look Up (Batch) | Resolve up to 100 companies in one call. Every item counts as one request. |
 | Sanctions Screening | Screen (Beta) | Fuzzy-match a name against consolidated sanctions lists. Optional PEP screening (beta, Spain only). |
-| Insolvency | Search | Corporate insolvency notices in nine markets. |
+| Insolvency | Search | Corporate insolvency notices in twelve markets. |
 | Validation | Validate VAT Number | Check an EU VAT number and return the registered trader. |
 | Validation | Look Up LEI | Look up a Legal Entity Identifier. |
 | Coverage | Get | The countries the API serves and how often each is refreshed. |
 
 ### Company
 
-**Search** takes its inputs in **Filters**: Name, Country, Company Number (a Spanish NIF or CIF, French SIREN, UK company number, Irish CRO number, Polish KRS number, Norwegian organisation number, Croatian MBS, Belgian enterprise number or Danish CVR number), VAT Number, SIREN, SIRET, NIP, REGON, OIB, Status (Canonical), Founded After and Founded Before. Give at least one of Name or an identifier. A name matches partially, best match first, and each company carries a `match_score` from 0 to 100. If you leave Country out, the API uses the first country allowed for your key (usually Spain). With **Return All** off, **Limit** caps the number of items (1 to 100).
+**Search** takes its inputs in **Filters**: Name, Country, Company Number (a Spanish NIF or CIF, French SIREN, UK company number, Irish CRO number, Polish KRS number, Norwegian organisation number, Croatian MBS, Belgian enterprise number or Danish CVR number), VAT Number, SIREN, SIRET, NIP, REGON, OIB, Status, Local Status, Founded After and Founded Before. Give at least one of Name or an identifier. A name matches partially, best match first, and each company carries a `match_score` from 0 to 100. If you leave Country out, the API uses the first country allowed for your key (usually Spain). With **Return All** off, **Limit** caps the number of items (1 to 100).
 
 **Autocomplete** is the same search with the fields a type-ahead needs: **Text**, **Country** and **Limit** (default 6). The API has no separate autocomplete endpoint, so this operation calls `GET /companies/search`.
 
@@ -66,7 +66,7 @@ By default the node returns one item with the matches under `data` and a summary
 
 ### Insolvency
 
-**Search** covers corporate insolvency notices only (personal and consumer insolvency is never returned) in nine markets: FR, DE, GB, AT, CH, NO, FI, US and NL. Spain's insolvency data is not part of this operation. Give at least one of Company Name, Company Number, Country, Event Type or Date From under **Filters**. No notice found is not proof of solvency.
+**Search** covers corporate insolvency notices only (personal and consumer insolvency is never returned) in twelve markets: FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR and SE. Spain's insolvency data is not part of this operation. Give at least one of Company Name, Company Number, Country, Event Type or Date From under **Filters**. No notice found is not proof of solvency.
 
 ### Validation
 
@@ -88,14 +88,14 @@ The free plan allows 10 requests a minute; paid plans allow more (see the [prici
 
 ## Scope limits
 
-- Company records are live for Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark and Croatia. Officers exist for Spain, France, the United Kingdom and Norway only, corporate events for Spain, France and the United Kingdom only, and monitoring for Spain, Ireland and Poland only. This node does not offer corporate events or monitoring; officers are embedded in **Get** where they exist. Ireland and Poland are company-level (no officers yet). Norway has no corporate-event stream.
-- Finland is company records only (no officers, no corporate-event stream, no monitoring); its insolvency notices are linked by business ID.
-- Sweden is company records only (no officers, no corporate-event stream, no monitoring, no registry-compliance signal, no insolvency notices), and sole traders are never served.
-- Croatia is company records only (same limits as Sweden), and sole traders are never served.
-- Belgium is company records only (same limits as Sweden), and enterprises of natural persons are never served.
-- Denmark is company records only (same limits as Sweden, and no share capital), and sole proprietorships and estates are never served. Its status includes the register's bankruptcy state.
-- Sweden, Croatia, Belgium and Denmark are not among the nine insolvency markets.
-- Insolvency notices are corporate only, in nine markets (FR, DE, GB, AT, CH, NO, FI, US, NL).
+- Company records are live for Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia and Slovakia. Officers exist for Spain, France, the United Kingdom and Norway only, corporate events for Spain, France and the United Kingdom, plus register-change events for Finland, Sweden, Belgium, Croatia and Denmark, and monitoring for Spain, Ireland, Poland, Finland, Sweden, Belgium, Croatia and Denmark only. This node does not offer corporate events or monitoring; officers are embedded in **Get** where they exist. Ireland and Poland are company-level (no officers yet). Norway has no corporate-event stream.
+- Finland is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal); its insolvency notices are linked by business ID.
+- Sweden is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal; corporate insolvency notices are linked by organisationsnummer), and sole traders are never served.
+- Croatia is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal; corporate insolvency notices are linked by MBS), and sole traders are never served.
+- Belgium is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no insolvency notices: a bankruptcy shows in the company status and in the register-change events), and enterprises of natural persons are never served. Belgium is not one of the twelve insolvency markets.
+- Denmark is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no share capital; corporate insolvency notices are linked by CVR number), and sole proprietorships and estates are never served. Its status includes the register's bankruptcy state.
+- Register-change events (name, status, legal form and registered address; share capital for Croatia) are dated when the change first appears in the register data, are not gazette notices and start on 2026-09-30.
+- Insolvency notices are corporate only, in twelve markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE).
 - Sanctions screening is beta. PEP screening is beta and Spain only.
 
 ## Compatibility
@@ -105,7 +105,7 @@ Built and tested against n8n 2.41 (self-hosted, Node 24). Earlier n8n versions h
 ## Resources
 
 - [Prometiam API documentation](https://www.prometiam.com/risk-api/docs)
-- [Get an API key](https://www.prometiam.com/signup)
+- [Start a 14-day free trial](https://www.prometiam.com/signup)
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
 - Support: [support@prometiam.com](mailto:support@prometiam.com)
 

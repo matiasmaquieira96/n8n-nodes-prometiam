@@ -72,8 +72,8 @@ test('scope limits travel with the features they limit', () => {
   const byName = (n) => [...walkProperties()].find(({ prop }) => prop.name === n).prop
   const insolvency = operationOptions().find((o) => o.resource === 'insolvency').option.description
   assert.match(insolvency, /corporate only/i)
-  assert.match(insolvency, /nine markets/)
-  for (const cc of ['FR', 'DE', 'GB', 'AT', 'CH', 'NO', 'FI', 'US', 'NL']) assert.match(insolvency, new RegExp(`\\b${cc}\\b`), cc)
+  assert.match(insolvency, /twelve markets/)
+  for (const cc of ['FR', 'DE', 'GB', 'AT', 'CH', 'NO', 'FI', 'US', 'NL', 'DK', 'HR', 'SE']) assert.match(insolvency, new RegExp(`\\b${cc}\\b`), cc)
   const lookup = byName('inputMode').description
   assert.match(lookup, /Every item counts as one request/)
   assert.match(lookup, /up to 100/)
@@ -82,12 +82,12 @@ test('scope limits travel with the features they limit', () => {
   assert.match(nodeDescription.description, /sanctions lists \(beta\)/)
 })
 
-test('the eleven registry countries and nine insolvency markets are offered', () => {
+test('the thirteen registry countries and twelve insolvency markets are offered', () => {
   const all = [...walkProperties()]
   const registry = all.find(({ path, resource }) => path === 'filters.country' && resource === 'company').prop
-  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['BE', 'DK', 'ES', 'FI', 'FR', 'GB', 'HR', 'IE', 'NO', 'PL', 'SE'])
+  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['BE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'IE', 'NO', 'PL', 'SE', 'SK'])
   const insolvency = all.find(({ path, resource }) => path === 'filters.country' && resource === 'insolvency').prop
-  assert.deepEqual(insolvency.options.map((o) => o.value).sort(), ['AT', 'CH', 'DE', 'FI', 'FR', 'GB', 'NL', 'NO', 'US'])
+  assert.deepEqual(insolvency.options.map((o) => o.value).sort(), ['AT', 'CH', 'DE', 'DK', 'FI', 'FR', 'GB', 'HR', 'NL', 'NO', 'SE', 'US'])
 })
 
 test('options are sorted by name, as n8n lint asks', () => {
@@ -208,7 +208,7 @@ test('option values are values the API accepts', { skip: SPEC_SKIP }, () => {
     const values = prop.options.map((o) => o.value)
     assert.deepEqual(values.filter((v) => !allowed.includes(v)), [], `${resource}.${operations[0]} ${prop.name}`)
     // a list the API defines must be offered in full
-    if (['country', 'status_canonical', 'entity_type', 'pep_min_tier'].includes(sends(prop))) {
+    if (['country', 'status', 'entity_type', 'pep_min_tier'].includes(sends(prop))) {
       assert.deepEqual([...values].sort(), [...allowed].sort(), `${resource}.${operations[0]} ${prop.name} is incomplete`)
     }
   }

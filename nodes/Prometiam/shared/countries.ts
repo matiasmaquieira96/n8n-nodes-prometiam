@@ -1,31 +1,36 @@
 import type { INodePropertyOptions } from 'n8n-workflow';
 
-/** The eleven company-registry countries, in alphabetical order of their names. */
+/** The thirteen company-registry countries, in alphabetical order of their names. */
 export const REGISTRY_COUNTRIES: INodePropertyOptions[] = [
 	{ name: 'Belgium', value: 'BE' },
 	{ name: 'Croatia', value: 'HR' },
 	{ name: 'Denmark', value: 'DK' },
+	{ name: 'Estonia', value: 'EE' },
 	{ name: 'Finland', value: 'FI' },
 	{ name: 'France', value: 'FR' },
 	{ name: 'Ireland', value: 'IE' },
 	{ name: 'Norway', value: 'NO' },
 	{ name: 'Poland', value: 'PL' },
+	{ name: 'Slovakia', value: 'SK' },
 	{ name: 'Spain', value: 'ES' },
 	{ name: 'Sweden', value: 'SE' },
 	{ name: 'United Kingdom', value: 'GB' },
 ];
 
 /**
- * The nine insolvency markets. They are not the same set as the company registries: Germany, Austria,
+ * The twelve insolvency markets. They are not the same set as the company registries: Germany, Austria,
  * Switzerland, the Netherlands and the United States have notices but no company registry.
  */
 export const INSOLVENCY_COUNTRIES: INodePropertyOptions[] = [
 	{ name: 'Austria', value: 'AT' },
+	{ name: 'Croatia', value: 'HR' },
+	{ name: 'Denmark', value: 'DK' },
 	{ name: 'Finland', value: 'FI' },
 	{ name: 'France', value: 'FR' },
 	{ name: 'Germany', value: 'DE' },
 	{ name: 'Netherlands', value: 'NL' },
 	{ name: 'Norway', value: 'NO' },
+	{ name: 'Sweden', value: 'SE' },
 	{ name: 'Switzerland', value: 'CH' },
 	{ name: 'United Kingdom', value: 'GB' },
 	{ name: 'United States', value: 'US' },

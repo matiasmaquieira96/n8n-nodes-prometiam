@@ -44,7 +44,7 @@ export const companyGetDescription: INodeProperties[] = [
 						name: 'Insolvency Notices',
 						value: 'insolvency',
 						description:
-							'Corporate insolvency notices only, in nine markets (FR, DE, GB, AT, CH, NO, FI, US, NL)',
+							'Corporate insolvency notices only, in twelve markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE)',
 					},
 					{ name: 'LEI Record', value: 'lei' },
 					{ name: 'Public Procurement Awards', value: 'procurement' },

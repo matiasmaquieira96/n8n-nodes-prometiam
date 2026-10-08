@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Company Search: the **Status (Canonical)** filter is now **Status** (the standard status, same list in every country) and there is a new **Local Status** filter for the register's own value.
+
 ## 0.1.0
 
 First version.

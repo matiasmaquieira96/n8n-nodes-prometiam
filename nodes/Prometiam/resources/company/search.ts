@@ -88,6 +88,14 @@ export const companySearchDescription: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Local Status',
+				name: 'localStatus',
+				type: 'string',
+				default: '',
+				description: "Only companies with this status in the register's own words, as shown in the local_status field of a result",
+				routing: queryString('local_status'),
+			},
+			{
 				displayName: 'Name',
 				name: 'name',
 				type: 'string',
@@ -138,14 +146,14 @@ export const companySearchDescription: INodeProperties[] = [
 				routing: queryString('siret'),
 			},
 			{
-				displayName: 'Status (Canonical)',
-				name: 'statusCanonical',
+				displayName: 'Status',
+				name: 'status',
 				type: 'options',
 				options: CANONICAL_STATUSES,
 				default: 'active',
 				description:
-					'Only companies with this cross-country status. Outside Spain it must be combined with a name or an identifier.',
-				routing: queryString('status_canonical'),
+					'Only companies with this standard status (the same list in every country). Outside Spain it must be combined with a name or an identifier.',
+				routing: queryString('status'),
 			},
 			{
 				displayName: 'VAT Number',

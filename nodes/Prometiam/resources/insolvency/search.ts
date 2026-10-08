@@ -38,7 +38,7 @@ export const insolvencySearchDescription: INodeProperties[] = [
 		default: {},
 		displayOptions: { show: showOnlyForInsolvencySearch },
 		description:
-			'Give at least one of Company Name, Company Number, Country, Event Type or Date From. Corporate insolvency only, in nine markets.',
+			'Give at least one of Company Name, Company Number, Country, Event Type or Date From. Corporate insolvency only, in twelve markets.',
 		options: [
 			{
 				displayName: 'Company Name',
@@ -64,7 +64,7 @@ export const insolvencySearchDescription: INodeProperties[] = [
 				options: INSOLVENCY_COUNTRIES,
 				default: 'FR',
 				description:
-					'Country of the notice. These nine markets are not the same set as the company registries.',
+					'Country of the notice. These twelve markets are not the same set as the company registries.',
 				routing: queryString('country'),
 			},
 			{
