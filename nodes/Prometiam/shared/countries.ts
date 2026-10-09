@@ -1,6 +1,6 @@
 import type { INodePropertyOptions } from 'n8n-workflow';
 
-/** The thirteen company-registry countries, in alphabetical order of their names. */
+/** The fourteen company-registry countries (thirteen European registers and the United States), in alphabetical order. */
 export const REGISTRY_COUNTRIES: INodePropertyOptions[] = [
 	{ name: 'Belgium', value: 'BE' },
 	{ name: 'Croatia', value: 'HR' },
@@ -15,11 +15,12 @@ export const REGISTRY_COUNTRIES: INodePropertyOptions[] = [
 	{ name: 'Spain', value: 'ES' },
 	{ name: 'Sweden', value: 'SE' },
 	{ name: 'United Kingdom', value: 'GB' },
+	{ name: 'United States', value: 'US' },
 ];
 
 /**
  * The twelve insolvency markets. They are not the same set as the company registries: Germany, Austria,
- * Switzerland, the Netherlands and the United States have notices but no company registry.
+ * Switzerland and the Netherlands have notices but no company registry.
  */
 export const INSOLVENCY_COUNTRIES: INodePropertyOptions[] = [
 	{ name: 'Austria', value: 'AT' },
