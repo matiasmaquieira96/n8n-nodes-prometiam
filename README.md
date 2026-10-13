@@ -1,6 +1,6 @@
 # n8n-nodes-prometiam
 
-This is an n8n community node for [Prometiam](https://www.prometiam.com). It puts company data for Europe and the United States in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania and the United States, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
+This is an n8n community node for [Prometiam](https://www.prometiam.com?utm_source=n8n&utm_medium=integration). It puts company data for Europe, the Americas, Asia-Pacific and Israel in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
 
 [n8n](https://n8n.io) is a workflow automation platform.
 
@@ -28,9 +28,9 @@ To install by hand on a self-hosted instance, run `npm install n8n-nodes-prometi
 
 ## Credentials
 
-1. Start a 14-day free trial at [prometiam.com/signup](https://www.prometiam.com/signup) (card required, nothing charged for 14 days; 1,000 calls, then Starter unless you cancel) to get an API key. It looks like `rk_live_…`. To try the API first without a card, use the demo key in the docs or the MCP server in demo mode (`npx -y prometiam-risk-mcp`, no key). Paid plans are on [prometiam.com/pricing](https://www.prometiam.com/pricing).
+1. Start a 14-day free trial at [prometiam.com/signup](https://www.prometiam.com/signup?utm_source=n8n&utm_medium=integration) (card required, nothing charged for 14 days; 500 credits, then Starter unless you cancel) to get an API key. It looks like `rk_live_…`. To try the API first without a card, use the demo key in the docs or the MCP server in demo mode (`npx -y prometiam-risk-mcp`, no key). Paid plans are on [prometiam.com/pricing](https://www.prometiam.com/pricing?utm_source=n8n&utm_medium=integration).
 2. In n8n, add a **Prometiam API** credential and paste the key into **API key**.
-3. Save. n8n tests the credential with one call to `GET /account`, which any valid key can read, and shows whether the key was accepted. That call counts as one request.
+3. Save. n8n tests the credential with one call to `GET /account`, which any valid key can read, and shows whether the key was accepted. That call costs no credits.
 
 The node sends the key as `Authorization: Bearer <key>` to `https://api.prometiam.com/functions/v1/risk-api`. The address is fixed in the node: there is no field to change it, so a workflow cannot send your key to another host.
 
@@ -41,7 +41,7 @@ The node sends the key as `Authorization: Bearer <key>` to `https://api.prometia
 | Company | Search | Find companies by name or by registry number in one country. Returns one item per company. **Return All** follows the paging cursor for you. |
 | Company | Autocomplete | Type-ahead suggestions: give the letters typed so far and a small limit. |
 | Company | Get | The full profile of one company by its Company ID, with optional extra blocks (**Include**). |
-| Company | Look Up (Batch) | Resolve up to 100 companies in one call. Every item counts as one request. |
+| Company | Look Up (Batch) | Resolve up to 100 companies in one call. Every item costs 1 credit. |
 | Sanctions Screening | Screen (Beta) | Fuzzy-match a name against consolidated sanctions lists. Optional PEP screening (beta, Spain only). |
 | Insolvency | Search | Corporate insolvency notices in twelve markets. |
 | Validation | Validate VAT Number | Check an EU VAT number and return the registered trader. |
@@ -82,26 +82,36 @@ By default the node returns one item with the matches under `data` and a summary
 
 ## Rate limits, plans and batching
 
-The free plan allows 10 requests a minute; paid plans allow more (see the [pricing page](https://www.prometiam.com/pricing)). Over the limit the API answers `429` with a `Retry-After` header. A node with many input items sends one request per item at the same moment, which a low limit will refuse. Under **Options**, add **Batching** to space the requests out: **Items per Batch** and **Batch Interval (Ms)** (the defaults send 10 items every 60 seconds, which fits the free plan). To resolve a long list of companies, the **Look Up (Batch)** operation needs far fewer calls, but every item in it still counts as one request.
+The free plan allows 10 requests a minute; paid plans allow more (see the [pricing page](https://www.prometiam.com/pricing?utm_source=n8n&utm_medium=integration)). Over the limit the API answers `429` with a `Retry-After` header. A node with many input items sends one request per item at the same moment, which a low limit will refuse. Under **Options**, add **Batching** to space the requests out: **Items per Batch** and **Batch Interval (Ms)** (the defaults send 10 items every 60 seconds, which fits the free plan). To resolve a long list of companies, the **Look Up (Batch)** operation needs far fewer calls, but every item in it still counts as one request.
 
-**Options** also has a **Timeout** for a single request. Monthly quotas count successful requests only.
+**Options** also has a **Timeout** for a single request. Monthly credits are spent by successful calls only (1 credit for a company record, errors are free).
 
 ## Scope limits
 
-- Company records are live for Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania and the United States. Officers exist for Spain, France, the United Kingdom and Norway only. This node does not offer corporate events or monitoring (the API does, on its own endpoints); officers are embedded in **Get** where they exist. Ireland and Poland are company-level (no officers yet).
+- Company records are live for Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel. Officers exist for Spain, France, the United Kingdom and Norway only. This node does not offer corporate events or monitoring (the API does, on its own endpoints); officers are embedded in **Get** where they exist. Ireland and Poland are company-level (no officers yet).
 - Estonia is company records only (no officers, no registry-compliance signal); status includes liquidation and bankruptcy (no insolvency notices); activity codes in EMTAK 2008 or 2025 per company; sole traders (FIE) are never served.
 - Slovakia is company records only (no officers, no registry-compliance signal); commercial legal persons only; status includes bankruptcy (konkurz) and restructuring (no insolvency notices); no VAT number; sole traders and other natural persons are never served.
 - Switzerland is company records only (no officers, no registry-compliance signal, no activity code); legal entities and branches on the commercial register only, sole proprietorships are never served; status includes liquidation and dissolved for a deleted company; insolvency notices (SHAB) are linked by UID where the notice names it.
 - Latvia is company records only, updated daily; status includes liquidation, insolvency and restructuring (no insolvency notices); no activity code; sole traders, farms and cooperatives are never served.
 - Cyprus is company records only, updated monthly; no activity code, share capital or VAT number; names as filed, in Greek or Latin letters; partnerships and business names are never served.
 - Romania is company records only, updated monthly; status includes dissolution, liquidation and insolvency (no insolvency notices); no share capital; the VAT number is built from the CUI and not confirmed by the register; sole traders (PFA, II, IF) are never served.
+- Lithuania is company records only, updated every working day; status includes liquidation, bankruptcy and restructuring (no insolvency notices); activity code NACE Rev. 2.1; share capital for UAB and AB only; sole proprietorships, partnerships, branches and non-commercial bodies are never served.
+- The Czech Republic is company records only (commercial legal persons of the public register), updated every working day; status includes liquidation, insolvency, bankruptcy and restructuring (no insolvency notices); activity code CZ-NACE 2025; share capital is served; no VAT number; sole traders and other natural persons are never served.
+- Canada is federal corporations only, company records only (no activity code, share capital, VAT number, insolvency status or insolvency notices), updated every working day; provincial, territorial and not-for-profit corporations are never served.
+- Brazil is company records only (commercial legal persons, one record per CNPJ root with the head office's CNPJ), updated monthly; no officers, partners, contacts or VAT number; the activity code is CNAE, not NACE; sole proprietors (MEI included), non-profits and branches are never served.
+- Colombia is company records only (companies of the commercial register), updated every working day; no address, share capital or VAT number; liquidation and reorganisation are read from the company name; the activity code is CIIU, not NACE; the Colombian records are offered under CC BY-SA 4.0.
+- Australia is company records only (proprietary, public and foreign companies), updated weekly; the register gives the state and postcode, not a street address; no activity code, share capital or insolvency notices; the VAT number is the ABN while it is registered for GST.
+- Japan is company records only, updated every working day; no founding date, activity code, share capital or VAT number; status is active, deregistered or merged; names are in Japanese, with the English and romanised names in the registry details.
+- Singapore is company records only (local companies, limited liability partnerships and foreign company branches), updated monthly; no share capital, region or GST number; the activity code is SSIC 2020, not NACE; sole proprietorships and partnerships are never served.
+- Taiwan is company records only, updated every working day; names and addresses are in Chinese; the activity code is the tax industry code, not NACE; the VAT number is the unified business number where the company is in the tax file; sole proprietorships, partnerships and domestic branches are never served.
+- Israel is company records only (Israeli and registered foreign companies), updated every working day; names are in Hebrew, with the English name where the register holds one; no activity code, share capital or VAT number; liquidation and receivership show in the status.
 - Finland is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal); its insolvency notices are linked by business ID.
 - Sweden is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal; corporate insolvency notices are linked by organisationsnummer), and sole traders are never served.
 - Croatia is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal; corporate insolvency notices are linked by MBS), and sole traders are never served.
 - Belgium is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no insolvency notices: a bankruptcy shows in the company status and in the register-change events), and enterprises of natural persons are never served. Belgium is not one of the twelve insolvency markets.
 - Denmark is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no share capital; corporate insolvency notices are linked by CVR number), and sole proprietorships and estates are never served. Its status includes the register's bankruptcy state.
 - The United States is company records only (no officers and no registry-compliance signal, with register-change events (dated by the weekly read) and monitoring): the business registers of New York, Colorado, Connecticut and Pennsylvania plus SEC filers and LEI holders from every state, Delaware included; not every US company. One record per state registration; New York and Pennsylvania publish active entities only; updated weekly. A company number is `NY-4424185`, `CIK-0000320193` or `LEI-` and the LEI; there is no US VAT number.
-- Register-change events (name, status, legal form and registered address; share capital for Croatia) are dated when the change first appears in the register data (for the United States, the weekly read of the registers that first sees it), are not gazette notices and start on 2026-09-30.
+- Register-change events (name, status, legal form and registered address; share capital for Croatia, Estonia, Slovakia, Switzerland, Latvia, Lithuania, Taiwan, Brazil and the Czech Republic) are dated when the change first appears in the register data (for the United States, the weekly read of the registers that first sees it), are not gazette notices and start on 2026-09-30 (for the countries added in October 2026, at their first load).
 - Insolvency notices are corporate only, in twelve markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE).
 - Sanctions screening is beta. PEP screening is beta and Spain only.
 
@@ -111,8 +121,8 @@ Built and tested against n8n 2.41 (self-hosted, Node 24). Earlier n8n versions h
 
 ## Resources
 
-- [Prometiam API documentation](https://www.prometiam.com/risk-api/docs)
-- [Start a 14-day free trial](https://www.prometiam.com/signup)
+- [Prometiam API documentation](https://www.prometiam.com/risk-api/docs?utm_source=n8n&utm_medium=integration)
+- [Start a 14-day free trial](https://www.prometiam.com/signup?utm_source=n8n&utm_medium=integration)
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
 - Support: [support@prometiam.com](mailto:support@prometiam.com)
 

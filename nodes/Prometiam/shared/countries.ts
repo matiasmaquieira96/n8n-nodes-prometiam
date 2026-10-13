@@ -1,23 +1,33 @@
 import type { INodePropertyOptions } from 'n8n-workflow';
 
-/** The eighteen company-registry countries (seventeen European registers and the United States), in alphabetical order. */
+/** The twenty-eight company-registry countries (Europe, North and South America, Asia-Pacific and Israel), in alphabetical order. */
 export const REGISTRY_COUNTRIES: INodePropertyOptions[] = [
+	{ name: 'Australia', value: 'AU' },
 	{ name: 'Belgium', value: 'BE' },
+	{ name: 'Brazil', value: 'BR' },
+	{ name: 'Canada', value: 'CA' },
+	{ name: 'Colombia', value: 'CO' },
 	{ name: 'Croatia', value: 'HR' },
 	{ name: 'Cyprus', value: 'CY' },
+	{ name: 'Czech Republic', value: 'CZ' },
 	{ name: 'Denmark', value: 'DK' },
 	{ name: 'Estonia', value: 'EE' },
 	{ name: 'Finland', value: 'FI' },
 	{ name: 'France', value: 'FR' },
 	{ name: 'Ireland', value: 'IE' },
+	{ name: 'Israel', value: 'IL' },
+	{ name: 'Japan', value: 'JP' },
 	{ name: 'Latvia', value: 'LV' },
+	{ name: 'Lithuania', value: 'LT' },
 	{ name: 'Norway', value: 'NO' },
 	{ name: 'Poland', value: 'PL' },
 	{ name: 'Romania', value: 'RO' },
+	{ name: 'Singapore', value: 'SG' },
 	{ name: 'Slovakia', value: 'SK' },
 	{ name: 'Spain', value: 'ES' },
 	{ name: 'Sweden', value: 'SE' },
 	{ name: 'Switzerland', value: 'CH' },
+	{ name: 'Taiwan', value: 'TW' },
 	{ name: 'United Kingdom', value: 'GB' },
 	{ name: 'United States', value: 'US' },
 ];

@@ -82,10 +82,10 @@ test('scope limits travel with the features they limit', () => {
   assert.match(nodeDescription.description, /sanctions lists \(beta\)/)
 })
 
-test('the eighteen registry countries and twelve insolvency markets are offered', () => {
+test('the twenty-eight registry countries and twelve insolvency markets are offered', () => {
   const all = [...walkProperties()]
   const registry = all.find(({ path, resource }) => path === 'filters.country' && resource === 'company').prop
-  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['BE', 'CH', 'CY', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'IE', 'LV', 'NO', 'PL', 'RO', 'SE', 'SK', 'US'])
+  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['AU', 'BE', 'BR', 'CA', 'CH', 'CO', 'CY', 'CZ', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'IE', 'IL', 'JP', 'LT', 'LV', 'NO', 'PL', 'RO', 'SE', 'SG', 'SK', 'TW', 'US'])
   const insolvency = all.find(({ path, resource }) => path === 'filters.country' && resource === 'insolvency').prop
   assert.deepEqual(insolvency.options.map((o) => o.value).sort(), ['AT', 'CH', 'DE', 'DK', 'FI', 'FR', 'GB', 'HR', 'NL', 'NO', 'SE', 'US'])
 })

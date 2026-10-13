@@ -1,5 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 import { REGISTRY_COUNTRIES } from '../../shared/countries';
+import { queryString } from '../../shared/routing';
 
 const showOnlyForCompanyAutocomplete = {
 	resource: ['company'],
@@ -22,16 +23,6 @@ export const companyAutocompleteDescription: INodeProperties[] = [
 		routing: { send: { type: 'query', property: 'name' } },
 	},
 	{
-		displayName: 'Country',
-		name: 'autocompleteCountry',
-		type: 'options',
-		options: REGISTRY_COUNTRIES,
-		default: 'ES',
-		displayOptions: { show: showOnlyForCompanyAutocomplete },
-		description: 'Country whose companies are suggested',
-		routing: { send: { type: 'query', property: 'country' } },
-	},
-	{
 		displayName: 'Limit',
 		name: 'autocompleteLimit',
 		type: 'number',
@@ -43,5 +34,25 @@ export const companyAutocompleteDescription: INodeProperties[] = [
 			send: { type: 'query', property: 'limit' },
 			output: { maxResults: '={{$value}}' },
 		},
+	},
+	{
+		// in an Options collection like company → Get and Search (n8n review of 13 Oct 2026)
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
+		displayOptions: { show: showOnlyForCompanyAutocomplete },
+		options: [
+			{
+				displayName: 'Country',
+				name: 'country',
+				type: 'options',
+				options: REGISTRY_COUNTRIES,
+				default: 'ES',
+				description: 'Country whose companies are suggested (Spain when not set)',
+				routing: queryString('country'),
+			},
+		],
 	},
 ];

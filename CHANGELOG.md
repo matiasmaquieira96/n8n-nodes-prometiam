@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3
+
+- Company: Lithuania, the Czech Republic, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel are registry countries (twenty-eight in all), with their scope limits in the README.
+- Company Autocomplete: **Country** is under **Options**, as on Search and Get (Spain when not set).
+
 ## 0.1.2
 
 - Company: Switzerland, Latvia, Cyprus and Romania are registry countries (eighteen in all).
