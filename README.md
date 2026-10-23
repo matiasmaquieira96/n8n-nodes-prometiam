@@ -1,6 +1,6 @@
 # n8n-nodes-prometiam
 
-This is an n8n community node for [Prometiam](https://www.prometiam.com?utm_source=n8n&utm_medium=integration). It puts company data for Europe, the Americas, Asia-Pacific and Israel in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
+This is an n8n community node for [Prometiam](https://www.prometiam.com?utm_source=n8n&utm_medium=integration). It puts company data for Europe, the Americas, Asia-Pacific and Israel in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, Germany, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
 
 [n8n](https://n8n.io) is a workflow automation platform.
 
@@ -15,14 +15,16 @@ This is an n8n community node for [Prometiam](https://www.prometiam.com?utm_sour
 
 ## Installation
 
-Follow the [community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n documentation:
+**n8n Cloud:** the node is verified (since 22 October 2026). Search for **Prometiam** in the nodes panel of the canvas and add it. If it does not show, enable **Verified Community Nodes** in the Admin Panel and restart the instance.
+
+**Self-hosted:** follow the [community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n documentation:
 
 1. Go to **Settings**, then **Community nodes**.
 2. Select **Install**.
 3. Enter `n8n-nodes-prometiam` in **Enter npm package name**.
 4. Agree to the risks of using community nodes and select **Install**.
 
-The node then appears as **Prometiam** in the nodes panel. Only the instance owner or an admin can install community nodes. n8n Cloud lists community nodes only after n8n has verified them; on a self-hosted instance you can install any of them.
+The node then appears as **Prometiam** in the nodes panel. Only the instance owner or an admin can install community nodes.
 
 To install by hand on a self-hosted instance, run `npm install n8n-nodes-prometiam` in the `nodes` folder of your n8n user folder (`~/.n8n/nodes`) and restart n8n.
 
@@ -43,7 +45,7 @@ The node sends the key as `Authorization: Bearer <key>` to `https://api.prometia
 | Company | Get | The full profile of one company by its Company ID, with optional extra blocks (**Include**). |
 | Company | Look Up (Batch) | Resolve up to 100 companies in one call. Every item costs 1 credit. |
 | Sanctions Screening | Screen (Beta) | Fuzzy-match a name against consolidated sanctions lists. Optional PEP screening (beta, Spain only). |
-| Insolvency | Search | Corporate insolvency notices in twelve markets. |
+| Insolvency | Search | Corporate insolvency notices in fifteen markets. |
 | Validation | Validate VAT Number | Check an EU VAT number and return the registered trader. |
 | Validation | Look Up LEI | Look up a Legal Entity Identifier. |
 | Coverage | Get | The countries the API serves and how often each is refreshed. |
@@ -54,7 +56,7 @@ The node sends the key as `Authorization: Bearer <key>` to `https://api.prometia
 
 **Autocomplete** is the same search with the fields a type-ahead needs: **Text**, **Country** and **Limit** (default 6). The API has no separate autocomplete endpoint, so this operation calls `GET /companies/search`.
 
-**Get** takes the **Company ID** (the `id` of a search result). Under **Options**, **Include** attaches the risk flags (registry-compliance signal), corporate insolvency notices, the LEI record or public procurement awards to the profile. Officers are embedded where they exist, in Spain, France, the United Kingdom and Norway only.
+**Get** takes the **Company ID** (the `id` of a search result). Under **Options**, **Include** attaches the risk flags (registry-compliance signal), corporate insolvency notices, the LEI record or public procurement awards to the profile. Officers are embedded where they exist, in Spain, France, the United Kingdom, Norway and Poland (Polish natural persons are masked by the register itself) only.
 
 **Look Up (Batch)** takes companies either as rows (**Define Below**: country plus a company number, or country plus a name) or as a JSON array (**JSON**, for example the output of a previous node). It returns one item per input row with a `status` of `found`, `not_found`, `error` or `timeout` (resend timeouts). **Every item counts as one request** against your plan. A batch larger than your remaining quota is refused up front with `429 batch_exceeds_quota` and the number that fits in `max_items_now`. Batch calls are not part of the free trial. **Options** has an **Idempotency Key** to replay the same batch safely for 24 hours without using quota again.
 
@@ -66,7 +68,7 @@ By default the node returns one item with the matches under `data` and a summary
 
 ### Insolvency
 
-**Search** covers corporate insolvency notices only (personal and consumer insolvency is never returned) in twelve markets: FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR and SE. Spain's insolvency data is not part of this operation. Give at least one of Company Name, Company Number, Country, Event Type or Date From under **Filters**. No notice found is not proof of solvency.
+**Search** covers corporate insolvency notices only (personal and consumer insolvency is never returned) in fifteen markets: FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE, ES, LV and EE. Give at least one of Company Name, Company Number, Country, Event Type or Date From under **Filters**. No notice found is not proof of solvency.
 
 ### Validation
 
@@ -88,31 +90,32 @@ The free plan allows 10 requests a minute; paid plans allow more (see the [prici
 
 ## Scope limits
 
-- Company records are live for Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel. Officers exist for Spain, France, the United Kingdom and Norway only. This node does not offer corporate events or monitoring (the API does, on its own endpoints); officers are embedded in **Get** where they exist. Ireland and Poland are company-level (no officers yet).
-- Estonia is company records only (no officers, no registry-compliance signal); status includes liquidation and bankruptcy (no insolvency notices); activity codes in EMTAK 2008 or 2025 per company; sole traders (FIE) are never served.
+- Company records are live for Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, Germany, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel. Officers exist for Spain, France, the United Kingdom, Norway and Poland (Polish natural persons are masked by the register itself) only. This node does not offer corporate events or monitoring (the API does, on its own endpoints); officers are embedded in **Get** where they exist. Ireland is company-level (no officers yet).
+- Estonia is company records only (no officers, no registry-compliance signal); status includes liquidation and bankruptcy (insolvency notices are the register's bankruptcy declarations, no court or case number); activity codes in EMTAK 2008 or 2025 per company; sole traders (FIE) are never served.
 - Slovakia is company records only (no officers, no registry-compliance signal); commercial legal persons only; status includes bankruptcy (konkurz) and restructuring (no insolvency notices); no VAT number; sole traders and other natural persons are never served.
 - Switzerland is company records only (no officers, no registry-compliance signal, no activity code); legal entities and branches on the commercial register only, sole proprietorships are never served; status includes liquidation and dissolved for a deleted company; insolvency notices (SHAB) are linked by UID where the notice names it.
-- Latvia is company records only, updated daily; status includes liquidation, insolvency and restructuring (no insolvency notices); no activity code; sole traders, farms and cooperatives are never served.
+- Latvia is company records only, updated daily; status includes liquidation, insolvency and restructuring (insolvency notices from the Insolvency Register, CC0, opening and closing notices); no activity code; sole traders, farms and cooperatives are never served.
 - Cyprus is company records only, updated monthly; no activity code, share capital or VAT number; names as filed, in Greek or Latin letters; partnerships and business names are never served.
 - Romania is company records only, updated monthly; status includes dissolution, liquidation and insolvency (no insolvency notices); no share capital; the VAT number is built from the CUI and not confirmed by the register; sole traders (PFA, II, IF) are never served.
 - Lithuania is company records only, updated every working day; status includes liquidation, bankruptcy and restructuring (no insolvency notices); activity code NACE Rev. 2.1; share capital for UAB and AB only; sole proprietorships, partnerships, branches and non-commercial bodies are never served.
 - The Czech Republic is company records only (commercial legal persons of the public register), updated every working day; status includes liquidation, insolvency, bankruptcy and restructuring (no insolvency notices); activity code CZ-NACE 2025; share capital is served; no VAT number; sole traders and other natural persons are never served.
 - Canada is federal corporations only, company records only (no activity code, share capital, VAT number, insolvency status or insolvency notices), updated every working day; provincial, territorial and not-for-profit corporations are never served.
-- Brazil is company records only (commercial legal persons, one record per CNPJ root with the head office's CNPJ), updated monthly; no officers, partners, contacts or VAT number; the activity code is CNAE, not NACE; sole proprietors (MEI included), non-profits and branches are never served.
-- Colombia is company records only (companies of the commercial register), updated every working day; no address, share capital or VAT number; liquidation and reorganisation are read from the company name; the activity code is CIIU, not NACE; the Colombian records are offered under CC BY-SA 4.0.
+- Brazil is company records only (commercial legal persons, one record per CNPJ root with the head office's CNPJ), updated monthly; no officers, partners, contacts or VAT number; the activity code is CNAE, not NACE (a NACE Rev. 2 class (or only the NACE division) is derived from it through ISIC Rev. 4 where the official tables allow, and nace_derived marks it); sole proprietors (MEI included), non-profits and branches are never served.
+- Colombia is company records only (companies of the commercial register), updated monthly; no address, share capital or VAT number; liquidation and reorganisation are read from the company name; the activity code is CIIU, not NACE (a NACE Rev. 2 class (or only the NACE division) is derived from it through ISIC Rev. 4 where the official tables allow, and nace_derived marks it); the Colombian records are offered under CC BY-SA 4.0.
 - Australia is company records only (proprietary, public and foreign companies), updated weekly; the register gives the state and postcode, not a street address; no activity code, share capital or insolvency notices; the VAT number is the ABN while it is registered for GST.
 - Japan is company records only, updated every working day; no founding date, activity code, share capital or VAT number; status is active, deregistered or merged; names are in Japanese, with the English and romanised names in the registry details.
-- Singapore is company records only (local companies, limited liability partnerships and foreign company branches), updated monthly; no share capital, region or GST number; the activity code is SSIC 2020, not NACE; sole proprietorships and partnerships are never served.
+- Singapore is company records only (local companies, limited liability partnerships and foreign company branches), updated monthly; no share capital, region or GST number; the activity code is SSIC 2020, not NACE (a NACE Rev. 2 class (or only the NACE division) is derived from it through ISIC Rev. 4 where the official tables allow, and nace_derived marks it); sole proprietorships and partnerships are never served.
 - Taiwan is company records only, updated every working day; names and addresses are in Chinese; the activity code is the tax industry code, not NACE; the VAT number is the unified business number where the company is in the tax file; sole proprietorships, partnerships and domestic branches are never served.
+- Germany is company records only, German companies that hold a Legal Entity Identifier plus a partial set of energy-market actors; not an extract of the German commercial register and not every German company; no officers, shareholders, share capital, activity code or VAT number (a VAT search is refused); sole traders, civil-law partnerships, associations, foundations, public bodies, funds and branches are never served; updated daily.
 - Israel is company records only (Israeli and registered foreign companies), updated every working day; names are in Hebrew, with the English name where the register holds one; no activity code, share capital or VAT number; liquidation and receivership show in the status.
 - Finland is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal); its insolvency notices are linked by business ID.
 - Sweden is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal; corporate insolvency notices are linked by organisationsnummer), and sole traders are never served.
 - Croatia is company records only (with register-change events and monitoring, but no officers and no registry-compliance signal; corporate insolvency notices are linked by MBS), and sole traders are never served.
-- Belgium is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no insolvency notices: a bankruptcy shows in the company status and in the register-change events), and enterprises of natural persons are never served. Belgium is not one of the twelve insolvency markets.
+- Belgium is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no insolvency notices: a bankruptcy shows in the company status and in the register-change events), and enterprises of natural persons are never served. Belgium is not one of the fifteen insolvency markets.
 - Denmark is company records only (with register-change events and monitoring, but no officers, no registry-compliance signal and no share capital; corporate insolvency notices are linked by CVR number), and sole proprietorships and estates are never served. Its status includes the register's bankruptcy state.
-- The United States is company records only (no officers and no registry-compliance signal, with register-change events (dated by the weekly read) and monitoring): the business registers of New York, Colorado, Connecticut and Pennsylvania plus SEC filers and LEI holders from every state, Delaware included; not every US company. One record per state registration; New York and Pennsylvania publish active entities only; updated weekly. A company number is `NY-4424185`, `CIK-0000320193` or `LEI-` and the LEI; there is no US VAT number.
+- The United States is company records only (no officers and no registry-compliance signal, with register-change events (dated by the weekly read) and monitoring): the business registers of New York, Colorado, Connecticut, Pennsylvania, Florida, Iowa, the District of Columbia and Texas (the Texas Comptroller's franchise-tax file, not the Secretary of State register) plus SEC filers and LEI holders from every state, Delaware included; not every US company. One record per state registration; New York, Pennsylvania and Iowa publish active entities only (the District of Columbia serves every status; Florida serves active and inactive entities: profit corporations, limited liability companies, limited partnerships and non-profit corporations, domestic and foreign); updated weekly. A company number is `NY-4424185`, `CIK-0000320193` or `LEI-` and the LEI; there is no US VAT number.
 - Register-change events (name, status, legal form and registered address; share capital for Croatia, Estonia, Slovakia, Switzerland, Latvia, Lithuania, Taiwan, Brazil and the Czech Republic) are dated when the change first appears in the register data (for the United States, the weekly read of the registers that first sees it), are not gazette notices and start on 2026-09-30 (for the countries added in October 2026, at their first load).
-- Insolvency notices are corporate only, in twelve markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE).
+- Insolvency notices are corporate only, in fifteen markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE, ES, LV, EE).
 - Sanctions screening is beta. PEP screening is beta and Spain only.
 
 ## Compatibility

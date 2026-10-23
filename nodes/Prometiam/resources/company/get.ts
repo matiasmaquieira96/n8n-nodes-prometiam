@@ -16,7 +16,7 @@ export const companyGetDescription: INodeProperties[] = [
 		default: '',
 		displayOptions: { show: showOnlyForCompanyGet },
 		description:
-			'The Prometiam company ID: the ID field of a search result. Officers are embedded where they exist (Spain, France, the United Kingdom and Norway only).',
+			'The Prometiam company ID: the ID field of a search result. Officers are embedded where they exist (Spain, France, the United Kingdom, Norway and Poland (Polish natural persons are masked by the register itself) only).',
 	},
 	{
 		displayName: 'Options',
@@ -44,7 +44,7 @@ export const companyGetDescription: INodeProperties[] = [
 						name: 'Insolvency Notices',
 						value: 'insolvency',
 						description:
-							'Corporate insolvency notices only, in twelve markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE)',
+							'Corporate insolvency notices only, in fifteen markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE, ES, LV, EE)',
 					},
 					{ name: 'LEI Record', value: 'lei' },
 					{ name: 'Public Procurement Awards', value: 'procurement' },

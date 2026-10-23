@@ -50,9 +50,12 @@ export const sanctionsScreenDescription: INodeProperties[] = [
 				name: 'entityType',
 				type: 'options',
 				options: [
+					{ name: 'Aircraft', value: 'aircraft' },
 					{ name: 'Any', value: 'any' },
-					{ name: 'Company or Other Entity', value: 'entity' },
+					{ name: 'Company', value: 'company' },
+					{ name: 'Company (Legacy Value)', value: 'entity', description: 'Same as Company, kept for workflows saved before 0.1.4' },
 					{ name: 'Person', value: 'person' },
+					{ name: 'Unknown', value: 'unknown', description: 'Entries whose type the list does not state' },
 					{ name: 'Vessel', value: 'vessel' },
 				],
 				default: 'any',

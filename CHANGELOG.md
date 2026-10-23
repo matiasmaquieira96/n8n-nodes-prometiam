@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+
+- Company: Germany is a registry country (twenty-nine in all): LEI-registered German companies and a partial set of energy-market actors, not an extract of the commercial register, with its scope limits in the README.
+- Insolvency: the country comment now says only Austria and the Netherlands lack company records.
+- Sanctions Screening: **Entity Type** offers Company, Aircraft and Unknown, the types the API stores; the old Company or Other Entity value is kept as Company (Legacy Value), so saved workflows keep working.
+
 ## 0.1.3
 
 - Company: Lithuania, the Czech Republic, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan and Israel are registry countries (twenty-eight in all), with their scope limits in the README.

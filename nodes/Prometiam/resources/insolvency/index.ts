@@ -19,7 +19,7 @@ export const insolvencyDescription: INodeProperties[] = [
 				value: 'search',
 				action: 'Search insolvency notices',
 				description:
-					'Search corporate insolvency notices (corporate only; twelve markets: FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE)',
+					'Search corporate insolvency notices (corporate only; fifteen markets: FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE, ES, LV, EE)',
 				routing: {
 					request: { method: 'GET', url: '/insolvency/search' },
 					output: dataAsItems,
