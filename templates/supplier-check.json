@@ -1,0 +1,461 @@
+{
+  "name": "Check a new supplier: register record, VAT number and insolvency notices",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Check a new supplier: register record, VAT number, insolvency notices\n\n### How it works\nFor one supplier (a country and a company number) this workflow:\n1. finds the company in its official register, or ends with a clear message when no company has that number;\n2. checks the VAT number on the record with the EU VAT validation service, when the record has one;\n3. searches corporate insolvency notices for the company, when its country is a covered market;\n4. returns one report row: name, status, legal form, address, the VAT result, the notices found and the points to review.\n\nThe report is a reading aid, not a credit score or a rating. An empty insolvency result only means that no notice was found.\n\n### Setup\n1. Install the verified community node `n8n-nodes-prometiam` (tested with 0.1.5). It runs on n8n Cloud and on self-hosted instances: https://docs.n8n.io/integrations/community-nodes/installation-and-management/install-verified-community-nodes\n2. Create a Prometiam API credential with your API key. A key comes with a 14-day free trial of 500 credits (a card is required, nothing is charged during it): https://www.prometiam.com/signup?utm_source=n8n&utm_medium=template\n3. Open **Supplier to check** and set `country` (ISO code) and `company_number`.\n4. Run the workflow. One check costs up to 4 credits: search 1, VAT 1, insolvency 2.\n\nLimits: the VAT check covers EU numbers only. Insolvency notices are corporate only and cover sixteen markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE, ES, LV, EE, SG); for any other country the report says they were not checked.\n\n### Customization\nReplace the manual trigger with a form, a webhook or a new row in your supplier sheet, and send the report to Slack, e-mail or your ERP. Add the node's Sanctions Screening operation (beta) if you need it.",
+        "height": 900,
+        "width": 660
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Input\nOne supplier: its country and its company number. The sample is a large Spanish company.",
+        "height": 480,
+        "width": 440,
+        "color": 7
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Note: input",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Register record\nFinds the company by its number. A number no company has ends in a short \"not found\" report.",
+        "height": 680,
+        "width": 440,
+        "color": 7
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Note: register",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## VAT number\nChecked only when the record has one. If the check does not answer, the report says so and goes on.",
+        "height": 480,
+        "width": 460,
+        "color": 7
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Note: VAT",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Insolvency notices\nCorporate notices, newest first, in the covered markets. For any other country the report says they were not checked.",
+        "height": 480,
+        "width": 460,
+        "color": 7
+      },
+      "id": "a1000000-0000-4000-8000-000000000005",
+      "name": "Note: insolvency",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Report\nOne row: the facts and the points a person should review. Not a score.",
+        "height": 480,
+        "width": 300,
+        "color": 7
+      },
+      "id": "a1000000-0000-4000-8000-000000000006",
+      "name": "Note: report",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        -300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a1000000-0000-4000-8000-000000000011",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1000000-0000-4000-8000-000000000320",
+              "name": "country",
+              "value": "ES",
+              "type": "string"
+            },
+            {
+              "id": "a1000000-0000-4000-8000-000000000321",
+              "name": "company_number",
+              "value": "A46103834",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000012",
+      "name": "Supplier to check",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "company",
+        "operation": "search",
+        "returnAll": false,
+        "limit": 1,
+        "filters": {
+          "country": "={{ $json.country }}",
+          "companyNumber": "={{ $json.company_number }}"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000013",
+      "name": "Find the company in the register",
+      "type": "n8n-nodes-prometiam.prometiam",
+      "typeVersion": 1,
+      "position": [
+        460,
+        0
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1000000-0000-4000-8000-000000000114",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000014",
+      "name": "Company found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        680,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1000000-0000-4000-8000-000000000350",
+              "name": "found",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "a1000000-0000-4000-8000-000000000351",
+              "name": "message",
+              "value": "No company with this number in the register of this country. Check the country code and the format of the number.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000015",
+      "name": "Report: company not found",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1000000-0000-4000-8000-000000000116",
+              "leftValue": "={{ $json.vat_number }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000016",
+      "name": "Has a VAT number?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        920,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "validation",
+        "operation": "vat",
+        "vatNumber": "={{ $json.vat_number }}"
+      },
+      "id": "a1000000-0000-4000-8000-000000000017",
+      "name": "Check the VAT number",
+      "type": "n8n-nodes-prometiam.prometiam",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        -120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1000000-0000-4000-8000-000000000118",
+              "leftValue": "={{ [\"FR\",\"DE\",\"GB\",\"AT\",\"CH\",\"NO\",\"FI\",\"US\",\"NL\",\"DK\",\"HR\",\"SE\",\"ES\",\"LV\",\"EE\",\"SG\"].includes($('Find the company in the register').first().json.country) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000018",
+      "name": "Insolvency notices covered?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "insolvency",
+        "operation": "search",
+        "returnAll": false,
+        "limit": 10,
+        "filters": {
+          "country": "={{ $('Find the company in the register').first().json.country }}",
+          "companyNumber": "={{ $('Find the company in the register').first().json.company_number }}"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000019",
+      "name": "Search insolvency notices",
+      "type": "n8n-nodes-prometiam.prometiam",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        -120
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// One report row from the answers of the nodes before. It is not a score: it lists facts and the points a person should look at.\nconst company = $('Find the company in the register').first().json;\n\n// The VAT check runs only when the record has a VAT number, and it can fail softly (a member state service that is down).\nconst vatNode = $('Check the VAT number');\nconst vat = vatNode.isExecuted ? vatNode.first().json : null;\nconst vatAnswered = !!vat && typeof vat.is_valid === 'boolean';\n\n// The insolvency search runs only for a covered market. A check that did not run is reported as not checked, never as \"no notices\".\nconst insolvencyNode = $('Search insolvency notices');\nconst insolvencyChecked = insolvencyNode.isExecuted;\nconst notices = insolvencyChecked ? insolvencyNode.all().map((item) => item.json).filter((n) => n && n.id) : [];\nnotices.sort((a, b) => String(b.filing_date || '').localeCompare(String(a.filing_date || '')));\nconst latest = notices[0] || null;\nconst noticeCount = notices.length + (notices.length >= 10 ? ' or more' : '');\n\nconst review = [];\nif (company.status !== 'active') review.push('Register status is \"' + (company.status || 'not stated') + '\"' + (company.local_status ? ' (' + company.local_status + ')' : ''));\nif (!company.vat_number) review.push('No VAT number on the register record: ask the supplier for it');\nelse if (!vatAnswered) review.push('The VAT number could not be checked (the check covers EU numbers only, and a member state service can be down): try again later');\nelse if (!vat.is_valid) review.push('The EU check does not confirm the VAT number' + (company.vat_number_source === 'rule' ? ' (it was built from the company identifier: the company may not be registered for intra-EU trade)' : ''));\nif (!insolvencyChecked) review.push('Insolvency notices are not covered for ' + company.country + ': not checked');\nelse if (notices.length) review.push(noticeCount + ' insolvency notice(s); the latest is dated ' + (latest.filing_date || 'unknown') + ' (' + (latest.event_type || 'type not stated') + ')');\n\nreturn [{\n  json: {\n    found: true,\n    company_name: company.company_name,\n    company_number: company.company_number,\n    country: company.country,\n    status: company.status,\n    local_status: company.local_status,\n    legal_form: company.legal_form,\n    address: [company.address, company.postal_code, company.city].filter(Boolean).join(', '),\n    founding_date: company.founding_date,\n    vat_number: company.vat_number,\n    vat_number_source: company.vat_number_source,\n    vat_valid: vatAnswered ? vat.is_valid : null,\n    vat_registered_name: vatAnswered ? vat.name : null,\n    insolvency_checked: insolvencyChecked,\n    insolvency_notices: insolvencyChecked ? notices.length : null,\n    latest_notice_date: latest ? latest.filing_date : null,\n    latest_notice_type: latest ? latest.event_type : null,\n    latest_notice_url: latest ? latest.notice_url : null,\n    points_to_review: review,\n    checked_at: new Date().toISOString(),\n  },\n}];"
+      },
+      "id": "a1000000-0000-4000-8000-000000000020",
+      "name": "Build the supplier report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1900,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Supplier to check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supplier to check": {
+      "main": [
+        [
+          {
+            "node": "Find the company in the register",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find the company in the register": {
+      "main": [
+        [
+          {
+            "node": "Company found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Company found?": {
+      "main": [
+        [
+          {
+            "node": "Has a VAT number?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Report: company not found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has a VAT number?": {
+      "main": [
+        [
+          {
+            "node": "Check the VAT number",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insolvency notices covered?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check the VAT number": {
+      "main": [
+        [
+          {
+            "node": "Insolvency notices covered?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insolvency notices covered?": {
+      "main": [
+        [
+          {
+            "node": "Search insolvency notices",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build the supplier report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search insolvency notices": {
+      "main": [
+        [
+          {
+            "node": "Build the supplier report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

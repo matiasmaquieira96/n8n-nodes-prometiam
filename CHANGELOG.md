@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.5
+
+- Company: the Country options gain South Korea, Malta, New Caledonia, Peru, Honduras, Guatemala, Moldova, Uruguay, the Dominican Republic, New Zealand, Bulgaria, Georgia, Tanzania and Zambia, so the list matches the countries the API accepts.
+- README: the scope limits name every country the node offers and carry one bullet for each (Argentina, Ukraine, Serbia, Ecuador, Chile, the Netherlands, Mexico, Slovenia, South Korea, Malta, New Caledonia, Greece, Peru, Honduras, Guatemala, Moldova, Uruguay, the Dominican Republic, New Zealand, Bulgaria, Georgia, Tanzania, Zambia and the LEI layers Italy, India, Austria, Luxembourg, Hungary, Portugal and Jersey); the register-change events and monitoring sentences name their countries.
+- README: Japan: the VAT number is the T-number while the invoice registration is in force; the employee count, share capital, date of establishment, website and industry division (a JSIC division) only for the companies whose figures gBizINFO (METI) holds.
+- Company: the Country options list every country the API serves (fifty-nine in all; twenty-nine before: Argentina, Austria, Chile, Ecuador, Greece, Hungary, India, Italy, Jersey, Luxembourg, Mexico, the Netherlands, Portugal, Serbia and Ukraine were missing).
+- Insolvency: Singapore (SG) joins the Country options, which now match the sixteen markets the descriptions list.
+- README: Texas, Oregon and Massachusetts in the United States registers; Massachusetts is the Corporations Division's public-record extract of 19 Oct 2026, refreshed only when the Division supplies a newer extract.
+- Insolvency: the **Search** operation's description lists all fifteen market codes (it stopped at twelve; Spain, Latvia and Estonia were missing).
+- README: Oregon joins the United States registers (active entities only); Colombia is updated monthly, not every working day.
+
 ## 0.1.4
 
 - Company: Germany is a registry country (twenty-nine in all): LEI-registered German companies and a partial set of energy-market actors, not an extract of the commercial register, with its scope limits in the README.

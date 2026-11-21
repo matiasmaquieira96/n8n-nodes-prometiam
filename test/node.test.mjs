@@ -72,7 +72,7 @@ test('scope limits travel with the features they limit', () => {
   const byName = (n) => [...walkProperties()].find(({ prop }) => prop.name === n).prop
   const insolvency = operationOptions().find((o) => o.resource === 'insolvency').option.description
   assert.match(insolvency, /corporate only/i)
-  assert.match(insolvency, /fifteen markets/)
+  assert.match(insolvency, /sixteen markets/)
   for (const cc of ['FR', 'DE', 'GB', 'AT', 'CH', 'NO', 'FI', 'US', 'NL', 'DK', 'HR', 'SE']) assert.match(insolvency, new RegExp(`\\b${cc}\\b`), cc)
   const lookup = byName('inputMode').description
   assert.match(lookup, /Every item counts as one request/)
@@ -82,12 +82,12 @@ test('scope limits travel with the features they limit', () => {
   assert.match(nodeDescription.description, /sanctions lists \(beta\)/)
 })
 
-test('the twenty-nine registry countries and fifteen insolvency markets are offered', () => {
+test('the 59 registry countries and sixteen insolvency markets are offered', () => {
   const all = [...walkProperties()]
   const registry = all.find(({ path, resource }) => path === 'filters.country' && resource === 'company').prop
-  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['AU', 'BE', 'BR', 'CA', 'CH', 'CO', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'IE', 'IL', 'JP', 'LT', 'LV', 'NO', 'PL', 'RO', 'SE', 'SG', 'SK', 'TW', 'US'])
+  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['AR', 'AT', 'AU', 'BE', 'BG', 'BR', 'CA', 'CH', 'CL', 'CO', 'CY', 'CZ', 'DE', 'DK', 'DO', 'EC', 'EE', 'ES', 'FI', 'FR', 'GB', 'GE', 'GR', 'GT', 'HN', 'HR', 'HU', 'IE', 'IL', 'IN', 'IT', 'JE', 'JP', 'KR', 'LT', 'LU', 'LV', 'MD', 'MT', 'MX', 'NC', 'NL', 'NO', 'NZ', 'PE', 'PL', 'PT', 'RO', 'RS', 'SE', 'SG', 'SI', 'SK', 'TW', 'TZ', 'UA', 'US', 'UY', 'ZM'])
   const insolvency = all.find(({ path, resource }) => path === 'filters.country' && resource === 'insolvency').prop
-  assert.deepEqual(insolvency.options.map((o) => o.value).sort(), ['AT', 'CH', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'LV', 'NL', 'NO', 'SE', 'US'])
+  assert.deepEqual(insolvency.options.map((o) => o.value).sort(), ['AT', 'CH', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'LV', 'NL', 'NO', 'SE', 'SG', 'US'])
 })
 
 test('options are sorted by name, as n8n lint asks', () => {
