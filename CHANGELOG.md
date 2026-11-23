@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6
+
+- Company: the Country options add the fifteen LEI layers that went public on 21 and 22 Nov 2026: the Bahamas, Bermuda, the British Virgin Islands, the Cayman Islands, China, Guernsey, Iceland, the Isle of Man, Liechtenstein, Mauritius, Panama, Saudi Arabia, South Africa, Turkey and the United Arab Emirates (entities with an LEI only).
+- Company: **Get** embeds officers for the Czech Republic too (Czech natural persons: the name and the month and year of birth only).
+- README: the coverage as at 23 Nov 2026 (every live country, and LEI-registered entities in more than 20 other jurisdictions, including Italy, India, Austria, Luxembourg and China).
+
 ## 0.1.5
 
 - Company: the Country options gain South Korea, Malta, New Caledonia, Peru, Honduras, Guatemala, Moldova, Uruguay, the Dominican Republic, New Zealand, Bulgaria, Georgia, Tanzania and Zambia, so the list matches the countries the API accepts.

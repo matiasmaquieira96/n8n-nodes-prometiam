@@ -16,7 +16,7 @@ export const companyGetDescription: INodeProperties[] = [
 		default: '',
 		displayOptions: { show: showOnlyForCompanyGet },
 		description:
-			'The Prometiam company ID: the ID field of a search result. Officers are embedded where they exist (Spain, France, the United Kingdom, Norway and Poland (Polish natural persons are masked by the register itself) only).',
+			'The Prometiam company ID: the ID field of a search result. Officers are embedded where they exist (Spain, France, the United Kingdom, Norway, Poland and the Czech Republic (Polish natural persons are masked by the register itself; Czech natural persons are the name and the month and year of birth only) only).',
 	},
 	{
 		displayName: 'Options',
