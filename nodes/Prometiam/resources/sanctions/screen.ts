@@ -73,6 +73,21 @@ export const sanctionsScreenDescription: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Include ICIJ Offshore Leaks Mention',
+				name: 'includeOffshoreLeaks',
+				type: 'boolean',
+				default: false,
+				description:
+					"Whether to add a separate offshore_leaks object from the ICIJ Offshore Leaks Database. A mention, never a sanction: static data (the leaks end in 2021), offshore entities and organisation intermediaries only, matched by name only, so a match is a prompt to look and not an identification. ICIJ's disclaimer, verbatim in offshore_leaks.notice: “There are legitimate uses for offshore companies and trusts. The inclusion of a person or entity in the ICIJ Offshore Leaks Database is not intended to suggest or imply that they have engaged in illegal or improper conduct. Many people and entities have the same or similar names. We suggest you confirm the identities of any individuals or entities included in the database based on addresses or other identifiable information. The data comes directly from the leaked files ICIJ has received in connection with various investigations and each dataset encompasses a defined time period specified in the database. Some information may have changed over time.” No extra credit",
+				routing: {
+					send: {
+						type: 'query',
+						property: 'include_offshore_leaks',
+						value: '={{ $value ? true : undefined }}',
+					},
+				},
+			},
+			{
 				displayName: 'Include PEP Screening (Beta, Spain Only)',
 				name: 'includePep',
 				type: 'boolean',

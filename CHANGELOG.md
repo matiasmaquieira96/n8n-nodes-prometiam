@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7
+
+- Sanctions: **Screen** gains the option Include ICIJ Offshore Leaks Mention: a separate `offshore_leaks` object from the ICIJ Offshore Leaks Database. A mention, never a sanction: static data (the leaks end in 2021), offshore entities and organisation intermediaries only, matched by name only, so a match is a prompt to look and not an identification; ICIJ's disclaimer comes verbatim in `offshore_leaks.notice`; no extra credit.
+
 ## 0.1.6
 
 - Company: the Country options add the fifteen LEI layers that went public on 21 and 22 Nov 2026: the Bahamas, Bermuda, the British Virgin Islands, the Cayman Islands, China, Guernsey, Iceland, the Isle of Man, Liechtenstein, Mauritius, Panama, Saudi Arabia, South Africa, Turkey and the United Arab Emirates (entities with an LEI only).
