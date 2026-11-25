@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8
+
+- README: France joins the countries with monitoring (status change, dissolution when the company is seen closed, BODACC notices as corporate events, sanctions match), on the API's own endpoints; this node itself still offers no monitoring.
+
 ## 0.1.7
 
 - Sanctions: **Screen** gains the option Include ICIJ Offshore Leaks Mention: a separate `offshore_leaks` object from the ICIJ Offshore Leaks Database. A mention, never a sanction: static data (the leaks end in 2021), offshore entities and organisation intermediaries only, matched by name only, so a match is a prompt to look and not an identification; ICIJ's disclaimer comes verbatim in `offshore_leaks.notice`; no extra credit.
