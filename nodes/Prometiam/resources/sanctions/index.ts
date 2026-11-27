@@ -14,11 +14,11 @@ export const sanctionsDescription: INodeProperties[] = [
 		displayOptions: { show: showOnlyForSanctions },
 		options: [
 			{
-				name: 'Screen (Beta)',
+				name: 'Screen',
 				value: 'screen',
 				action: 'Screen a name against sanctions lists',
 				description:
-					'Beta. Fuzzy-match a person or company name against consolidated sanctions lists. Do not use it as your only sanctions control.',
+					'Fuzzy-match a person or company name against consolidated sanctions lists',
 				routing: {
 					request: { method: 'GET', url: '/sanctions/screen' },
 				},

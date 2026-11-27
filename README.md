@@ -1,6 +1,6 @@
 # n8n-nodes-prometiam
 
-This is an n8n community node for [Prometiam](https://www.prometiam.com?utm_source=n8n&utm_medium=integration). It puts company data for Europe, the Americas, Asia-Pacific and Israel in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, Germany, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan, Israel and every other live country, plus LEI-registered entities in more than 20 other jurisdictions, including Italy, India, Austria, Luxembourg and China, resolve up to 100 companies in one call, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs.
+This is an n8n community node for [Prometiam](https://www.prometiam.com?utm_source=n8n&utm_medium=integration). It puts company data for Europe, the Americas, Asia-Pacific and Israel in your workflows: search and look up companies by name or registry number in Spain, France, the United Kingdom, Ireland, Poland, Norway, Finland, Sweden, Belgium, Denmark, Croatia, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, Lithuania, the Czech Republic, Germany, the United States, Canada, Brazil, Colombia, Australia, Japan, Singapore, Taiwan, Israel and every other live country, plus LEI-registered entities in more than 20 other jurisdictions, including Italy, India, Austria, Luxembourg and China, resolve up to 100 companies in one call, screen names against sanctions lists, check corporate insolvency notices, and validate VAT numbers and LEIs.
 
 [n8n](https://n8n.io) is a workflow automation platform.
 
@@ -44,7 +44,7 @@ The node sends the key as `Authorization: Bearer <key>` to `https://api.prometia
 | Company | Autocomplete | Type-ahead suggestions: give the letters typed so far and a small limit. |
 | Company | Get | The full profile of one company by its Company ID, with optional extra blocks (**Include**). |
 | Company | Look Up (Batch) | Resolve up to 100 companies in one call. Every item costs 1 credit. |
-| Sanctions Screening | Screen (Beta) | Fuzzy-match a name against consolidated sanctions lists. Optional PEP screening (beta, Spain only). |
+| Sanctions Screening | Screen | Fuzzy-match a name against consolidated sanctions lists. Optional PEP screening (beta, Spain only). |
 | Insolvency | Search | Corporate insolvency notices in sixteen markets. |
 | Validation | Validate VAT Number | Check an EU VAT number and return the registered trader. |
 | Validation | Look Up LEI | Look up a Legal Entity Identifier. |
@@ -60,9 +60,9 @@ The node sends the key as `Authorization: Bearer <key>` to `https://api.prometia
 
 **Look Up (Batch)** takes companies either as rows (**Define Below**: country plus a company number, or country plus a name) or as a JSON array (**JSON**, for example the output of a previous node). It returns one item per input row with a `status` of `found`, `not_found`, `error` or `timeout` (resend timeouts). **Every item counts as one request** against your plan. A batch larger than your remaining quota is refused up front with `429 batch_exceeds_quota` and the number that fits in `max_items_now`. Batch calls are not part of the free trial. **Options** has an **Idempotency Key** to replay the same batch safely for 24 hours without using quota again.
 
-### Sanctions Screening (beta)
+### Sanctions Screening
 
-Sanctions screening is **beta** and its results are limited: do not use it as your only sanctions control. **Screen** takes a **Name** and, under **Options**, a **Minimum Match Score** (30 to 100, default 80), an **Entity Type**, a **Limit** and **Group by Entity**. **Include PEP Screening** is **beta and Spain only**, and it is not a complete PEP check: the list holds no relatives or close associates. Sanctions screening needs a plan that includes it; the API answers `403` otherwise.
+**Screen** takes a **Name** and, under **Options**, a **Minimum Match Score** (30 to 100, default 80), an **Entity Type**, a **Limit** and **Group by Entity**. **Include PEP Screening** is **beta and Spain only**, and it is not a complete PEP check: the list holds no relatives or close associates. Sanctions screening needs a plan that includes it; the API answers `403` otherwise.
 
 By default the node returns one item with the matches under `data` and a summary under `meta`, so you can branch on `{{ $json.meta.result_count }}` even when nothing matches. Turn on **Split Matches Into Items** to get one item per match.
 
@@ -147,7 +147,7 @@ The free plan allows 10 requests a minute; paid plans allow more (see the [prici
 - Jersey is company records only, LEI-registered entities (from the global LEI index, CC0 1.0, updated daily), not an extract of the national company register; Ltd, Plc, Ltd (guarantee), LP, SLP, ILP and LLP;  the form is read from the name where the holder states none; the LEI is a second identifier (lei=); no officers, share capital, activity code or VAT number; sole proprietors, associations, foundations, public bodies, funds and branches are never served.
 - Register-change events (name, status, legal form and registered address, except that Ukraine has no address events and Ecuador reports the canton; share capital for Croatia, Estonia, Slovakia, Switzerland, Latvia, Lithuania, Taiwan, Brazil, the Czech Republic and Ukraine) exist for Ireland, Poland and Norway (from 14 Oct 2026, no gazette), Finland, Sweden, Belgium, Croatia, Denmark, Estonia, Slovakia, Switzerland, Latvia, Cyprus, Romania, the United States, Lithuania, Canada, Australia, Japan, Israel, Singapore, Colombia, Taiwan, Brazil, the Czech Republic, Germany, the Netherlands, Argentina, Ukraine, Serbia, Ecuador, Slovenia, South Korea, Malta, Greece, Moldova, Mexico (LEI holders only) and every LEI layer (more than 20 jurisdictions, including Austria, Italy, India, Luxembourg and China); none for Chile, New Caledonia, Peru, Honduras, Guatemala, Uruguay, the Dominican Republic, New Zealand, Bulgaria, Georgia, Tanzania and Zambia. They are dated when the change first appears in the register data (for the United States, the weekly read that first sees it), are not gazette notices and start on 2026-09-30 for Finland, Sweden, Belgium, Croatia, Denmark, Estonia, Slovakia and Switzerland, and at the first load for the countries added later (Ecuador 28 Oct, Argentina 28 Oct, the Netherlands 30 Oct, Malta 16 Nov, Greece 17 Nov and Moldova 20 Nov 2026; the LEI layers 24 Oct 2026). Monitoring (status change, dissolution, sanctions match and the events above) is offered for every live country except Chile, South Korea, New Caledonia, Peru, Honduras, Guatemala, Uruguay, the Dominican Republic, New Zealand, Bulgaria, Georgia, Tanzania, Zambia and Paraguay; Argentina has no dissolution alert, and Mexico raises sanctions matches only for companies that are not LEI holders.
 - Insolvency notices are corporate only, in sixteen markets (FR, DE, GB, AT, CH, NO, FI, US, NL, DK, HR, SE, ES, LV, EE, SG).
-- Sanctions screening is beta. PEP screening is beta and Spain only.
+- PEP screening is beta and Spain only.
 
 ## Compatibility
 

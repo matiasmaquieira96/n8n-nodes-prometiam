@@ -16,7 +16,7 @@ export class Prometiam implements INodeType {
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description:
-			'Search European companies, screen names against sanctions lists (beta), check corporate insolvency notices, and validate VAT numbers and LEIs',
+			'Search European companies, screen names against sanctions lists, check corporate insolvency notices, and validate VAT numbers and LEIs',
 		defaults: {
 			name: 'Prometiam',
 		},

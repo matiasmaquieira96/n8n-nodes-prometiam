@@ -57,11 +57,10 @@ test('every property that is shown belongs to a resource and operation that exis
   }
 })
 
-test('the sanctions operation is marked beta wherever it is described', () => {
+test('sanctions screening is not marked beta (out of beta since 27 Nov 2026); PEP stays beta and Spain only', () => {
   const op = operationOptions().find((o) => o.resource === 'sanctions')
-  assert.match(op.option.name, /\(Beta\)/)
-  assert.match(op.option.description, /^Beta\./)
-  assert.match(op.option.description, /only sanctions control/)
+  assert.doesNotMatch(op.option.name, /beta/i)
+  assert.doesNotMatch(op.option.description, /beta/i)
   const pep = [...walkProperties()].find(({ prop }) => prop.name === 'includePep').prop
   assert.match(pep.displayName, /Beta, Spain Only/)
   assert.match(pep.description, /Beta and Spain only/)
@@ -79,7 +78,8 @@ test('scope limits travel with the features they limit', () => {
   assert.match(lookup, /up to 100/)
   assert.match(lookup, /free trial/)
   assert.match(byName('companyId').description, /Spain, France, the United Kingdom, Norway, Poland and the Czech Republic/)
-  assert.match(nodeDescription.description, /sanctions lists \(beta\)/)
+  assert.match(nodeDescription.description, /screen names against sanctions lists, /)
+  assert.doesNotMatch(nodeDescription.description, /beta/i)
 })
 
 test('every registry country and LEI layer, and the sixteen insolvency markets, are offered', () => {

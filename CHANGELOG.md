@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.10
+
+- Sanctions screening is out of beta (27 Nov 2026): the package description, the Sanctions resource, the supplier-check template and the README no longer call it beta.
+
 ## 0.1.9
 
 - Sanctions: **Screen**'s Minimum Match Score takes 30 to 100 (it took 50 to 100), the range the API accepts; the API now refuses a value outside it, or a fraction such as 0.8, with a 400 instead of clamping it.

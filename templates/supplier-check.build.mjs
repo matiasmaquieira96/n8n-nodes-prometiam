@@ -51,7 +51,7 @@ The report is a reading aid, not a credit score or a rating. An empty insolvency
 Limits: the VAT check covers EU numbers only. Insolvency notices are corporate only and cover sixteen markets (${INSOLVENCY_MARKETS.join(', ')}); for any other country the report says they were not checked.
 
 ### Customization
-Replace the manual trigger with a form, a webhook or a new row in your supplier sheet, and send the report to Slack, e-mail or your ERP. Add the node's Sanctions Screening operation (beta) if you need it.`
+Replace the manual trigger with a form, a webhook or a new row in your supplier sheet, and send the report to Slack, e-mail or your ERP. Add the node's Sanctions Screening operation if you need it.`
 
 const reportCode = `// One report row from the answers of the nodes before. It is not a score: it lists facts and the points a person should look at.
 const company = $('${COMPANY}').first().json;
