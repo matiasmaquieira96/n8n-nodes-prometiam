@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.9
+
+- Sanctions: **Screen**'s Minimum Match Score takes 30 to 100 (it took 50 to 100), the range the API accepts; the API now refuses a value outside it, or a fraction such as 0.8, with a 400 instead of clamping it.
+- Company: the Country options add Paraguay, company records only and partial (the legal entities that sold to the Paraguayan state; the README states its limits).
+
 ## 0.1.8
 
 - README: France joins the countries with monitoring (status change, dissolution when the company is seen closed, BODACC notices as corporate events, sanctions match), on the API's own endpoints; this node itself still offers no monitoring.

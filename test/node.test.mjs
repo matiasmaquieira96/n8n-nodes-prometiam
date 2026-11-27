@@ -85,7 +85,7 @@ test('scope limits travel with the features they limit', () => {
 test('every registry country and LEI layer, and the sixteen insolvency markets, are offered', () => {
   const all = [...walkProperties()]
   const registry = all.find(({ path, resource }) => path === 'filters.country' && resource === 'company').prop
-  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['AE', 'AR', 'AT', 'AU', 'BE', 'BG', 'BM', 'BR', 'BS', 'CA', 'CH', 'CL', 'CN', 'CO', 'CY', 'CZ', 'DE', 'DK', 'DO', 'EC', 'EE', 'ES', 'FI', 'FR', 'GB', 'GE', 'GG', 'GR', 'GT', 'HN', 'HR', 'HU', 'IE', 'IL', 'IM', 'IN', 'IS', 'IT', 'JE', 'JP', 'KR', 'KY', 'LI', 'LT', 'LU', 'LV', 'MD', 'MT', 'MU', 'MX', 'NC', 'NL', 'NO', 'NZ', 'PA', 'PE', 'PL', 'PT', 'RO', 'RS', 'SA', 'SE', 'SG', 'SI', 'SK', 'TR', 'TW', 'TZ', 'UA', 'US', 'UY', 'VG', 'ZA', 'ZM'])
+  assert.deepEqual(registry.options.map((o) => o.value).sort(), ['AE', 'AR', 'AT', 'AU', 'BE', 'BG', 'BM', 'BR', 'BS', 'CA', 'CH', 'CL', 'CN', 'CO', 'CY', 'CZ', 'DE', 'DK', 'DO', 'EC', 'EE', 'ES', 'FI', 'FR', 'GB', 'GE', 'GG', 'GR', 'GT', 'HN', 'HR', 'HU', 'IE', 'IL', 'IM', 'IN', 'IS', 'IT', 'JE', 'JP', 'KR', 'KY', 'LI', 'LT', 'LU', 'LV', 'MD', 'MT', 'MU', 'MX', 'NC', 'NL', 'NO', 'NZ', 'PA', 'PE', 'PL', 'PT', 'PY', 'RO', 'RS', 'SA', 'SE', 'SG', 'SI', 'SK', 'TR', 'TW', 'TZ', 'UA', 'US', 'UY', 'VG', 'ZA', 'ZM'])
   const insolvency = all.find(({ path, resource }) => path === 'filters.country' && resource === 'insolvency').prop
   assert.deepEqual(insolvency.options.map((o) => o.value).sort(), ['AT', 'CH', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'HR', 'LV', 'NL', 'NO', 'SE', 'SG', 'US'])
 })

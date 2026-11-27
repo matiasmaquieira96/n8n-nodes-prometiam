@@ -53,6 +53,7 @@ export const REGISTRY_COUNTRIES: INodePropertyOptions[] = [
 	{ name: 'New Zealand', value: 'NZ' },
 	{ name: 'Norway', value: 'NO' },
 	{ name: 'Panama', value: 'PA' },
+	{ name: 'Paraguay', value: 'PY' },
 	{ name: 'Peru', value: 'PE' },
 	{ name: 'Poland', value: 'PL' },
 	{ name: 'Portugal', value: 'PT' },

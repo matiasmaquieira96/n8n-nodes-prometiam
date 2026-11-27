@@ -115,9 +115,9 @@ export const sanctionsScreenDescription: INodeProperties[] = [
 				displayName: 'Minimum Match Score',
 				name: 'threshold',
 				type: 'number',
-				typeOptions: { minValue: 50, maxValue: 100 },
+				typeOptions: { minValue: 30, maxValue: 100 },
 				default: 80,
-				description: 'Only return matches at or above this confidence, from 50 to 100',
+				description: 'Only return matches at or above this confidence, from 30 to 100',
 				routing: { send: { type: 'query', property: 'threshold' } },
 			},
 			{
